@@ -7,7 +7,7 @@ name: Deploy to Firebase Hosting on merge
     branches:
       - main
 jobs:
-  build_and_deploy:env:
+  build_and_deploy:
     env:
       VITE_API_KEY: "${{ secrets.VITE_API_KEY }}"
       VITE_AUTH_DOMAIN: "${{ secrets.VITE_AUTH_DOMAIN }}"
