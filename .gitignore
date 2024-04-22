@@ -23,5 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
+dev-dist
+.firebase
+
 .env
 .env.local

@@ -1,9 +1,11 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../atoms/authAtom";
-import { useEffect } from "react";
+import { PropsWithChildren, useEffect } from "react";
 import { homePath } from "../../routes";
 
-export function RequireUnAuth() {
+export function RequireUnAuth(props: PropsWithChildren) {
+  const { children } = props;
+
   const redirect = useNavigate();
   const { uid, loading } = useAuth();
 
@@ -14,12 +16,12 @@ export function RequireUnAuth() {
   }, [loading, uid, redirect]);
 
   if (loading) {
-    return null;
+    return <></>;
   }
 
   if (uid) {
-    return null;
+    return <></>;
   }
 
-  return <Outlet />;
+  return <>{children}</>;
 }

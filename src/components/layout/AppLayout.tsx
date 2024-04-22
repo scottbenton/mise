@@ -1,11 +1,13 @@
 import { Box, LinearProgress } from "@mui/material";
-import { Outlet } from "react-router-dom";
 import { useAuth } from "../../atoms/authAtom";
 import { useAtomValue } from "jotai";
 import { themeAtom } from "providers/MuiThemeProvider/themeAtom";
 import { THEME_TYPES } from "providers/MuiThemeProvider/themes";
+import { PropsWithChildren } from "react";
 
-export function AppLayout() {
+export default function AppLayout(props: PropsWithChildren) {
+  const { children } = props;
+
   const { loading } = useAuth();
   const { type } = useAtomValue(themeAtom);
 
@@ -28,7 +30,7 @@ export function AppLayout() {
         <NavRail />
       </Box> */}
       <Box flexGrow={1} overflow={"auto"}>
-        <Outlet />
+        {children}
       </Box>
       {/* <Box display={{ xs: "block", sm: "none" }}>BottomNav</Box> */}
     </Box>

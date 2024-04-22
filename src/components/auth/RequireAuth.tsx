@@ -1,9 +1,10 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../atoms/authAtom";
-import { useEffect } from "react";
+import { PropsWithChildren, useEffect } from "react";
 import { loginPath } from "../../routes";
 
-export function RequireAuth() {
+export function RequireAuth(props: PropsWithChildren) {
+  const { children } = props;
   const redirect = useNavigate();
   const { uid, loading } = useAuth();
 
@@ -14,12 +15,12 @@ export function RequireAuth() {
   }, [loading, uid, redirect]);
 
   if (loading) {
-    return null;
+    return <></>;
   }
 
   if (!uid) {
-    return null;
+    return <></>;
   }
 
-  return <Outlet />;
+  return <>{children}</>;
 }

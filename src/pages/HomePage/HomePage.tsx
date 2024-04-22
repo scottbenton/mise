@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 import { constructDateString } from "functions/constructDateString";
 import { Schedule } from "./Schedule";
 
-export function HomePage() {
+export default function HomePage() {
   const { username } = useAuth();
 
   const name = username ? username.split(" ")[0] : undefined;
