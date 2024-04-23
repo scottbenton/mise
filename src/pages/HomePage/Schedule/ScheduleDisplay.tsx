@@ -6,7 +6,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableRow,
   TextField,
 } from "@mui/material";
 import { createScheduleItem } from "api/schedule/createScheduleItem";
@@ -19,6 +18,8 @@ import { useEffect, useState } from "react";
 import { Schedule } from "types/Schedule.type";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { TimePicker } from "@mui/x-date-pickers";
+import { HoverRow } from "../HoverRow";
+import { useIsMobileDevice } from "functions/useIsMobileDevice";
 
 export interface ScheduleDisplayProps {
   date: Date;
@@ -99,6 +100,8 @@ export function ScheduleDisplay(props: ScheduleDisplayProps) {
       .catch(() => {});
   };
 
+  const isMobileDevice = useIsMobileDevice();
+
   return (
     <Box>
       <Table size={"small"}>
@@ -108,17 +111,28 @@ export function ScheduleDisplay(props: ScheduleDisplayProps) {
             date.setHours(items[itemId].time.hours);
             date.setMinutes(items[itemId].time.minutes);
             return (
-              <TableRow key={itemId}>
-                <TableCell align={"right"} sx={{ width: "10ch" }}>
-                  {dayjs(date).format("h:mm a")}
-                </TableCell>
-                <TableCell padding="none">{items[itemId].label}</TableCell>
-                <TableCell align={"right"}>
-                  <IconButton onClick={() => handleDeleteScheduleItem(itemId)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
+              <HoverRow
+                key={itemId}
+                cells={(isHovering) => (
+                  <>
+                    <TableCell align={"right"} sx={{ width: "10ch" }}>
+                      {dayjs(date).format("h:mm a")}
+                    </TableCell>
+                    <TableCell padding="none">{items[itemId].label}</TableCell>
+                    <TableCell align={"right"}>
+                      {isHovering || isMobileDevice ? (
+                        <IconButton
+                          onClick={() => handleDeleteScheduleItem(itemId)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      ) : (
+                        <Box height={40} />
+                      )}
+                    </TableCell>
+                  </>
+                )}
+              />
             );
           })}
         </TableBody>

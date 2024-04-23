@@ -8,6 +8,11 @@ import dayjs from "dayjs";
 import { constructDateString } from "functions/constructDateString";
 import { Schedule } from "./Schedule";
 
+import { DrawerToggle } from "../../components/layout/DrawerToggle";
+import { ThemeChange } from "../../components/layout/ThemeChange";
+import ThemeIcon from "@mui/icons-material/FormatPaint";
+import { Pomodoro } from "./Pomodoro/Pomodoro";
+
 export default function HomePage() {
   const { username } = useAuth();
 
@@ -24,49 +29,65 @@ export default function HomePage() {
         spacing={1}
         justifyContent={"space-between"}
       >
-        <Typography variant={"h5"} component={"h1"}>
+        <Typography
+          variant={"h5"}
+          component={"h1"}
+          textTransform={"capitalize"}
+        >
           Welcome Back{name ? `, ${name}` : ""}!
         </Typography>
-        <DatePicker
-          label={"Date"}
-          value={date}
-          onChange={(value) => setDate(value)}
-        />
+        <Box color={"primary.main"}>
+          <DrawerToggle
+            icon={<ThemeIcon />}
+            drawerContent={<ThemeChange />}
+            title={"Change your Theme"}
+          />
+        </Box>
       </Stack>
-      {date && (
-        <Grid container spacing={4} sx={{ mt: 0 }}>
-          <Grid item xs={12} md={8}>
-            <Stack spacing={4}>
-              <Box>
-                <Typography variant={"h6"} component={"h2"}>
-                  Schedule
-                </Typography>
-                <Schedule date={date.toDate()} />
-              </Box>
-              {/* <Box>
-                <Typography variant={"h6"} component={"h2"}>
-                  Journal
-                </Typography>
-              </Box> */}
-            </Stack>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Stack spacing={4}>
-              {/* <Box>
-                <Typography variant={"h6"} component={"h2"}>
-                  Pomodoro
-                </Typography>
-              </Box> */}
-              <Box>
-                <Typography variant={"h6"} component={"h2"}>
-                  Todo List
-                </Typography>
-                <TodoList date={date.toDate()} />
-              </Box>
-            </Stack>
-          </Grid>
+      <Grid container spacing={4} sx={{ mt: 0 }}>
+        <Grid item xs={12}>
+          <DatePicker
+            label={"Date"}
+            value={date}
+            onChange={(value) => setDate(value)}
+          />
         </Grid>
-      )}
+        {date && (
+          <>
+            <Grid item xs={12} md={8}>
+              <Stack spacing={4}>
+                <Box>
+                  <Typography variant={"h6"} component={"h2"}>
+                    Daily Schedule
+                  </Typography>
+                  <Schedule date={date.toDate()} />
+                </Box>
+                {/* <Box>
+                <Typography variant={"h6"} component={"h2"}>
+                Journal
+                </Typography>
+              </Box> */}
+              </Stack>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Stack spacing={4}>
+                <Box>
+                  <Typography variant={"h6"} component={"h2"}>
+                    Pomodoro
+                  </Typography>
+                  <Pomodoro />
+                </Box>
+                <Box>
+                  <Typography variant={"h6"} component={"h2"}>
+                    Daily Tasks
+                  </Typography>
+                  <TodoList date={date.toDate()} />
+                </Box>
+              </Stack>
+            </Grid>
+          </>
+        )}
+      </Grid>
     </PageLayout>
   );
 }

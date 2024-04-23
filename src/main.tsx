@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "@fontsource-variable/plus-jakarta-sans";
+import "@fontsource/major-mono-display";
 import { AppProviders } from "./providers/AppProviders.tsx";
 import { registerSW } from "virtual:pwa-register";
 

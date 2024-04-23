@@ -4,6 +4,20 @@ import { PropsWithChildren } from "react";
 import { themeAtom } from "./themeAtom";
 import { useAtom } from "jotai";
 
+declare module "@mui/material/styles" {
+  interface Theme {
+    fontFamilies: {
+      mono: string;
+    };
+  }
+  // allow configuration using `createTheme`
+  interface ThemeOptions {
+    fontFamilies: {
+      mono: string;
+    };
+  }
+}
+
 export function MuiThemeProvider(props: PropsWithChildren) {
   const { children } = props;
 
@@ -11,6 +25,9 @@ export function MuiThemeProvider(props: PropsWithChildren) {
   const { type, color } = themeSettings;
 
   const theme = createTheme({
+    fontFamilies: {
+      mono: ["Major Mono Display", "monospace"].join(","),
+    },
     typography: {
       fontFamily: ["Plus Jakarta Sans Variable", "Arial", "sans-serif"].join(
         ","

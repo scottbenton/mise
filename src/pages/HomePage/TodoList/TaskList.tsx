@@ -6,7 +6,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableRow,
   TextField,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -19,6 +18,8 @@ import { constructDateString } from "functions/constructDateString";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { deleteTask } from "api/tasks/deleteTask";
 import { updateTask } from "api/tasks/updateTask";
+import { HoverRow } from "../HoverRow";
+import { useIsMobileDevice } from "functions/useIsMobileDevice";
 
 export interface TaskListProps {
   initialTaskList: Record<string, Task>;
@@ -113,6 +114,7 @@ export function TaskList(props: TaskListProps) {
       })
       .catch(() => {});
   };
+  const isMobileDevice = useIsMobileDevice();
 
   return (
     <Box>
@@ -120,34 +122,43 @@ export function TaskList(props: TaskListProps) {
         <TableBody>
           {[...sortedUnCompletedTaskKeys, ...sortedCompletedTaskKeys].map(
             (taskId) => (
-              <TableRow key={taskId}>
-                <TableCell padding={"checkbox"} sx={{ maxWidth: 74 }}>
-                  <Checkbox
-                    onChange={(_evt, checked) =>
-                      handleCheckTask(taskId, checked)
-                    }
-                    checked={tasks[taskId].completed}
-                  />
-                </TableCell>
-                <TableCell
-                  padding={"none"}
-                  sx={{
-                    textDecoration: tasks[taskId].completed
-                      ? "line-through"
-                      : undefined,
-                    color: tasks[taskId].completed
-                      ? "text.secondary"
-                      : undefined,
-                  }}
-                >
-                  {tasks[taskId].label}
-                </TableCell>
-                <TableCell align={"right"}>
-                  <IconButton onClick={() => handleDeleteTask(taskId)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
+              <HoverRow
+                key={taskId}
+                cells={(isHovering) => (
+                  <>
+                    <TableCell padding={"checkbox"} sx={{ maxWidth: 74 }}>
+                      <Checkbox
+                        onChange={(_evt, checked) =>
+                          handleCheckTask(taskId, checked)
+                        }
+                        checked={tasks[taskId].completed}
+                      />
+                    </TableCell>
+                    <TableCell
+                      padding={"none"}
+                      sx={{
+                        textDecoration: tasks[taskId].completed
+                          ? "line-through"
+                          : undefined,
+                        color: tasks[taskId].completed
+                          ? "text.secondary"
+                          : undefined,
+                      }}
+                    >
+                      {tasks[taskId].label}
+                    </TableCell>
+                    <TableCell align={"right"}>
+                      {isHovering || isMobileDevice ? (
+                        <IconButton onClick={() => handleDeleteTask(taskId)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      ) : (
+                        <Box height={40} />
+                      )}
+                    </TableCell>
+                  </>
+                )}
+              />
             )
           )}
         </TableBody>

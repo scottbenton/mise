@@ -76,6 +76,6 @@ export const themeTypes = {
     name: "Black",
     type: "dark",
     backgroundColor: "#000",
-    paperColor: "#0f172a",
+    paperColor: "#000",
   },
 };

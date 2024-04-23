@@ -1,0 +1,73 @@
+import { Box, Card, IconButton, Stack, Typography } from "@mui/material";
+import { CURRENT_CYCLE, usePomodoro } from "./usePomodoro";
+import PlayIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
+import ResetIcon from "@mui/icons-material/Replay";
+
+export function Pomodoro() {
+  const { currentCycle, timer, setHasStarted } = usePomodoro();
+
+  const timeRemaining = timer.getRemainingTime();
+  const minutes = Math.floor(timeRemaining / 60000);
+  const seconds = Math.floor((timeRemaining - minutes * 60000) / 1000);
+  const paddedSeconds = (seconds + "").length === 1 ? "0" + seconds : seconds;
+
+  return (
+    <Box>
+      <Card
+        variant={"outlined"}
+        sx={(theme) => ({
+          p: 2,
+          bgcolor: "primary.main",
+          color: "primary.contrastText",
+          maxWidth: "sm",
+          background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.light} 100%)`,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        })}
+      >
+        <Typography variant={"h5"}>
+          {currentCycle === CURRENT_CYCLE.BREAK && "Break"}
+          {currentCycle === CURRENT_CYCLE.WORK && "Work"}
+        </Typography>
+        <Typography
+          variant={"h3"}
+          fontFamily={(theme) => theme.fontFamilies.mono}
+        >
+          {minutes}:{paddedSeconds}
+        </Typography>
+        <Stack spacing={0.5} direction={"row"}>
+          {timer.isPaused() && (
+            <>
+              <IconButton
+                onClick={() => {
+                  setHasStarted(true);
+                  timer.resume();
+                }}
+                color={"inherit"}
+              >
+                <PlayIcon />
+              </IconButton>
+              <IconButton
+                onClick={() => {
+                  setHasStarted(false);
+                  timer.stop();
+                }}
+                color={"inherit"}
+              >
+                <ResetIcon />
+              </IconButton>
+            </>
+          )}
+          {timer.isRunning() && (
+            <IconButton onClick={() => timer.pause()} color={"inherit"}>
+              <PauseIcon />
+            </IconButton>
+          )}
+        </Stack>
+      </Card>
+    </Box>
+  );
+}
