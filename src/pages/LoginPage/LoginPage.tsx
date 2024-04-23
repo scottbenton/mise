@@ -4,7 +4,7 @@ import { loginWithGoogle } from "../../lib/auth";
 
 export default function LoginPage() {
   return (
-    <PageLayout centered>
+    <PageLayout>
       <Typography variant={"h6"} component={"h1"}>
         Login Page
       </Typography>
