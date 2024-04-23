@@ -6,7 +6,7 @@ import "@fontsource/major-mono-display";
 import { AppProviders } from "./providers/AppProviders.tsx";
 import { registerSW } from "virtual:pwa-register";
 
-const intervalMS = 60 * 60 * 1000;
+const intervalMS = 60 * 1000;
 registerSW({
   immediate: true,
   onRegisteredSW(swUrl, r) {

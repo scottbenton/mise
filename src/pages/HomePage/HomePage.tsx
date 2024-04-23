@@ -21,11 +21,7 @@ export default function HomePage() {
 
   return (
     <PageLayout>
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-        spacing={1}
-        justifyContent={"space-between"}
-      >
+      <Stack direction={"row"} spacing={1} justifyContent={"space-between"}>
         <Typography
           variant={"h5"}
           component={"h1"}
