@@ -8,7 +8,7 @@ import {
   TableCell,
   TextField,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Task } from "types/TodoTask.type";
 import AddIcon from "@mui/icons-material/Add";
 import { useAuth } from "atoms/authAtom";
@@ -22,20 +22,14 @@ import { HoverRow } from "../HoverRow";
 import { useIsMobileDevice } from "functions/useIsMobileDevice";
 
 export interface TaskListProps {
-  initialTaskList: Record<string, Task>;
+  tasks: Record<string, Task>;
   date: Date;
 }
 
 export function TaskList(props: TaskListProps) {
-  const { initialTaskList, date } = props;
+  const { tasks, date } = props;
 
   const uid = useAuth().uid ?? "";
-
-  const [tasks, setTasks] = useState<Record<string, Task>>(initialTaskList);
-
-  useEffect(() => {
-    setTasks(initialTaskList);
-  }, [initialTaskList]);
 
   const sortedTaskKeys = Object.keys(tasks).sort((t1, t2) => {
     return tasks[t1].order - tasks[t2].order;
@@ -67,14 +61,7 @@ export function TaskList(props: TaskListProps) {
           : 0,
     };
     setNewTaskText("");
-    addTaskFn(newTask)
-      .then((taskId) => {
-        setTasks((prevTasks) => ({
-          ...prevTasks,
-          [taskId]: newTask,
-        }));
-      })
-      .catch(() => {});
+    addTaskFn(newTask).catch(() => {});
   };
 
   const { call: deleteTaskFn } = useInvokeApiFunction(
@@ -83,17 +70,7 @@ export function TaskList(props: TaskListProps) {
     "task"
   );
   const handleDeleteTask = (taskId: string) => {
-    deleteTaskFn({ taskId })
-      .then(() => {
-        setTasks((prevTasks) => {
-          const newTasks = {
-            ...prevTasks,
-          };
-          delete newTasks[taskId];
-          return newTasks;
-        });
-      })
-      .catch(() => {});
+    deleteTaskFn({ taskId }).catch(() => {});
   };
 
   const { call: updateTaskFn } = useInvokeApiFunction(
@@ -102,17 +79,7 @@ export function TaskList(props: TaskListProps) {
     "task"
   );
   const handleCheckTask = (taskId: string, completed: boolean) => {
-    updateTaskFn({ taskId, task: { completed } })
-      .then(() => {
-        setTasks((prevTasks) => ({
-          ...prevTasks,
-          [taskId]: {
-            ...prevTasks[taskId],
-            completed,
-          },
-        }));
-      })
-      .catch(() => {});
+    updateTaskFn({ taskId, task: { completed } }).catch(() => {});
   };
   const isMobileDevice = useIsMobileDevice();
 

@@ -1,6 +1,6 @@
 import { Box, Card, Skeleton, Stack } from "@mui/material";
-import { useLoadTasks } from "./useLoadTasks";
 import { TaskList } from "./TaskList";
+import { useListenToTasks, useTasks } from "atoms/taskAtom";
 
 export interface TodoListProps {
   date: Date;
@@ -9,7 +9,9 @@ export interface TodoListProps {
 export function TodoList(props: TodoListProps) {
   const { date } = props;
 
-  const { tasks: initialTasks, loading, error } = useLoadTasks(date);
+  useListenToTasks();
+
+  const { tasks, loading, error } = useTasks();
 
   return (
     <Card variant={"outlined"}>
@@ -21,9 +23,7 @@ export function TodoList(props: TodoListProps) {
         </Stack>
       )}
       {error && <Box p={2}>{error}</Box>}
-      {!loading && !error && initialTasks && (
-        <TaskList date={date} initialTaskList={initialTasks} />
-      )}
+      {!loading && !error && tasks && <TaskList date={date} tasks={tasks} />}
     </Card>
   );
 }

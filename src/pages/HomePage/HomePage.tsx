@@ -2,25 +2,22 @@ import { Box, Grid, Stack, Typography } from "@mui/material";
 import { PageLayout } from "../../components/layout/PageLayout";
 import { useAuth } from "atoms/authAtom";
 import { TodoList } from "./TodoList";
-import { useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
-import { constructDateString } from "functions/constructDateString";
 import { Schedule } from "./Schedule";
 
 import { DrawerToggle } from "../../components/layout/DrawerToggle";
 import { ThemeChange } from "../../components/layout/ThemeChange";
 import ThemeIcon from "@mui/icons-material/FormatPaint";
 import { Pomodoro } from "./Pomodoro/Pomodoro";
+import { useDateState } from "atoms/dateAtom";
 
 export default function HomePage() {
   const { username } = useAuth();
 
   const name = username ? username.split(" ")[0] : undefined;
 
-  const [date, setDate] = useState<dayjs.Dayjs | null>(
-    dayjs(constructDateString(new Date()))
-  );
+  const [date, setDate] = useDateState();
 
   return (
     <PageLayout>
@@ -48,8 +45,8 @@ export default function HomePage() {
         <Grid item xs={12}>
           <DatePicker
             label={"Date"}
-            value={date}
-            onChange={(value) => setDate(value)}
+            value={dayjs(date)}
+            onChange={(value) => setDate(value?.toDate())}
           />
         </Grid>
         {date && (
@@ -60,7 +57,7 @@ export default function HomePage() {
                   <Typography variant={"h6"} component={"h2"}>
                     Daily Schedule
                   </Typography>
-                  <Schedule date={date.toDate()} />
+                  <Schedule date={date} />
                 </Box>
                 {/* <Box>
                 <Typography variant={"h6"} component={"h2"}>
@@ -81,7 +78,7 @@ export default function HomePage() {
                   <Typography variant={"h6"} component={"h2"}>
                     Daily Tasks
                   </Typography>
-                  <TodoList date={date.toDate()} />
+                  <TodoList date={date} />
                 </Box>
               </Stack>
             </Grid>

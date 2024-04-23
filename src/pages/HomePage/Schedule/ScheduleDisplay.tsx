@@ -14,7 +14,7 @@ import { useInvokeApiFunction } from "api/useApiFunction";
 import { useAuth } from "atoms/authAtom";
 import dayjs from "dayjs";
 import { constructDateString } from "functions/constructDateString";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Schedule } from "types/Schedule.type";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { TimePicker } from "@mui/x-date-pickers";
@@ -23,18 +23,13 @@ import { useIsMobileDevice } from "functions/useIsMobileDevice";
 
 export interface ScheduleDisplayProps {
   date: Date;
-  initialSchedule: Record<string, Schedule>;
+  items: Record<string, Schedule>;
 }
 
 export function ScheduleDisplay(props: ScheduleDisplayProps) {
-  const { date, initialSchedule } = props;
+  const { date, items } = props;
 
   const uid = useAuth().uid ?? "";
-
-  const [items, setItems] = useState<Record<string, Schedule>>(initialSchedule);
-  useEffect(() => {
-    setItems(initialSchedule);
-  }, [initialSchedule]);
 
   const sortedScheduleKeys = Object.keys(items).sort((i1, i2) => {
     const dateA = new Date();
@@ -71,14 +66,7 @@ export function ScheduleDisplay(props: ScheduleDisplayProps) {
     };
     setNewItemLabel("");
     setNewItemTime(null);
-    addItemFn(newScheduleItem)
-      .then((itemId) => {
-        setItems((prevItems) => ({
-          ...prevItems,
-          [itemId]: newScheduleItem,
-        }));
-      })
-      .catch(() => {});
+    addItemFn(newScheduleItem).catch(() => {});
   };
 
   const { call: deleteScheduleFn } = useInvokeApiFunction(
@@ -87,17 +75,7 @@ export function ScheduleDisplay(props: ScheduleDisplayProps) {
     "schedule item"
   );
   const handleDeleteScheduleItem = (itemId: string) => {
-    deleteScheduleFn({ itemId })
-      .then(() => {
-        setItems((prevItems) => {
-          const newItems = {
-            ...prevItems,
-          };
-          delete newItems[itemId];
-          return newItems;
-        });
-      })
-      .catch(() => {});
+    deleteScheduleFn({ itemId }).catch(() => {});
   };
 
   const isMobileDevice = useIsMobileDevice();

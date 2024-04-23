@@ -1,6 +1,9 @@
 import { Box, Card, Skeleton, Stack } from "@mui/material";
-import { useLoadScheduleItems } from "./useLoadScheduleItems";
 import { ScheduleDisplay } from "./ScheduleDisplay";
+import {
+  useListenToScheduleItems,
+  useScheduleItems,
+} from "atoms/scheduleItemAtom";
 
 export interface ScheduleProps {
   date: Date;
@@ -9,7 +12,9 @@ export interface ScheduleProps {
 export function Schedule(props: ScheduleProps) {
   const { date } = props;
 
-  const { items, loading, error } = useLoadScheduleItems(date);
+  useListenToScheduleItems();
+
+  const { items, loading, error } = useScheduleItems();
 
   return (
     <Card variant={"outlined"}>
@@ -22,7 +27,7 @@ export function Schedule(props: ScheduleProps) {
       )}
       {error && <Box p={2}>{error}</Box>}
       {!loading && !error && items && (
-        <ScheduleDisplay date={date} initialSchedule={items} />
+        <ScheduleDisplay date={date} items={items} />
       )}
     </Card>
   );
