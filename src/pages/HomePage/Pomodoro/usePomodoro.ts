@@ -7,6 +7,7 @@ import {
 } from "react";
 import { useTimer, Timer } from "react-use-precision-timer";
 import { usePomodoroAudio } from "./usePomodoroAudio";
+import { useWakelock } from "./useWakelock";
 
 export enum CURRENT_CYCLE {
   WORK,
@@ -67,6 +68,8 @@ export function usePomodoro(): UsePomdoroReturnType {
       clearInterval(interval);
     };
   }, [isTimerRunning]);
+
+  useWakelock(isTimerRunning);
 
   return {
     currentCycle,

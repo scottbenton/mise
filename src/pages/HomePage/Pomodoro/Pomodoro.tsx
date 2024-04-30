@@ -3,6 +3,10 @@ import { CURRENT_CYCLE, usePomodoro } from "./usePomodoro";
 import PlayIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
 import ResetIcon from "@mui/icons-material/Replay";
+import FullscreenIcon from "@mui/icons-material/Fullscreen";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { MotionComponent } from "components/MotionComponent";
 
 export function Pomodoro() {
   const { currentCycle, timer, setHasStarted } = usePomodoro();
@@ -16,6 +20,8 @@ export function Pomodoro() {
     <Box>
       <Card
         variant={"outlined"}
+        component={motion.div}
+        layoutId={"pomodoro-container"}
         sx={(theme) => ({
           p: 2,
           bgcolor: "primary.main",
@@ -28,7 +34,23 @@ export function Pomodoro() {
           justifyContent: "center",
         })}
       >
-        <Typography variant={"h5"}>
+        <Box display={"flex"} justifyContent={"flex-end"} width={"100%"}>
+          <IconButton
+            component={MotionComponent}
+            motionComponent={Link}
+            to={"/pomodoro"}
+            layoutId={"pomodoro-fullscreen-icon"}
+            href={"/pomodoro"}
+            color={"inherit"}
+          >
+            <FullscreenIcon />
+          </IconButton>
+        </Box>
+        <Typography
+          variant={"h5"}
+          component={motion.h2}
+          layoutId={"pomodoro-cycle-text"}
+        >
           {currentCycle === CURRENT_CYCLE.BREAK && "Break"}
           {currentCycle === CURRENT_CYCLE.WORK && "Work"}
         </Typography>
